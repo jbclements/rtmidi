@@ -1,5 +1,5 @@
 #lang racket
-(require "rtmidi.rkt")
+(require rtmidi)
 
 ;; Create RtMidiIn and RtMidiOut
 (define in (make-rtmidi-in))
@@ -14,11 +14,13 @@
 
 ;; Open the first input and output port, if any
 
-(unless (empty? in-ports)
-  (rtmidi-open-port in 0))
+(match in-ports
+  [(cons a-port other-ports) (rtmidi-open-port in 0)]
+  [other (printf (current-error-port) "no input ports\n")])
 
-(unless (empty? out-ports)
-  (rtmidi-open-port out 0))
+(match out-ports
+  [(cons a-port other-ports) (rtmidi-open-port out 0)]
+  [other (printf (current-error-port) "no output ports\n")])
 
 ;; Send a note
 (rtmidi-send-message out (list #b10010000 65 127))

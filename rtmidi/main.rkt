@@ -1,10 +1,7 @@
 #lang racket/base
-(provide make-rtmidi-in
-         make-rtmidi-out
-         rtmidi-ports
-         rtmidi-open-port
-         rtmidi-close-port
-         rtmidi-send-message)
+
+;; this file provides FFI bindings to RtMidi. Note that you must
+;; currently compile RtMidi yourself, following the INSTALL directions.
 
 (require ffi/unsafe
          ffi/unsafe/define
@@ -12,6 +9,13 @@
          racket/async-channel
          racket/pretty
          (rename-in racket/contract [-> ->/c]))
+
+(provide make-rtmidi-in
+         make-rtmidi-out
+         rtmidi-ports
+         rtmidi-open-port
+         rtmidi-close-port
+         rtmidi-send-message)
 
 (define-ffi-definer define-rtmidi (ffi-lib "wrap-rtmidi"))
 
