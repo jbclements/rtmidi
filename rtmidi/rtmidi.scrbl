@@ -5,6 +5,33 @@
 This package provides Racket bindings for the RtMidi package. It is
 currently undocmented, this file notwithstanding.
 
+@section{Installation}
+
+This package is not self-contained. It depends on the RtMidi package, and 
+also requires you to compile a dynamic library used to connect to the 
+RtMidi code.
+
+At this point, this means that installing this package will require you
+to locate the package directory where this package is installed. 
+
+The best way to do this is probably to install the package using 
+@tt{raco pkg install} or the package manager, and then to evaluate
+
+@racketblock[(collection-path "rtmidi")]
+
+to see where the directory lives.
+
+Once you've located the collection directory, you'll need to extract
+http://www.music.mcgill.ca/~gary/rtmidi/release/rtmidi-2.1.0.tar.gz to the
+collection directory. Then run `make $PLATFORM`, where `PLATFORM` is one of `linux`,
+`macosx`, or `windows`.
+
+The wrapper is C++98 and should compile with any modern C++ compiler.
+
+I haven't tried the Windows build with this Makefile; you might need to make
+some adjustments.
+
+
 @defmodule[rtmidi]{ }
 
 Some stubs:
