@@ -2,5 +2,5 @@
 
 (define collection 'multi)
 
-(define deps (list  ))
-(define build-deps (list ))
+(define deps (list "base"))
+(define build-deps (list "scribble-lib"))
