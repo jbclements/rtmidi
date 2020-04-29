@@ -17,7 +17,19 @@
          rtmidi-close-port
          rtmidi-send-message)
 
-(define-ffi-definer define-rtmidi (ffi-lib "wrap-rtmidi"))
+;; On Mac OSX opening the wrapper with (ffi-lib "wrap-rtmidi") makes
+;; Racket look for the dylib in the directory of the main script that
+;; is running instead of in the directory of the module. This fixes
+;; that.
+(define-values (package-path script-name irrelevant )
+  (split-path
+   (resolved-module-path-name
+    (variable-reference->resolved-module-path
+     (#%variable-reference)))))
+
+(define lib-path (build-path package-path "wrap-rtmidi"))
+
+(define-ffi-definer define-rtmidi (ffi-lib lib-path))
 
 (define _rtmidi_in-pointer  (_cpointer 'rtmidi_in))
 (define _rtmidi_out-pointer (_cpointer 'rtmidi_out))
