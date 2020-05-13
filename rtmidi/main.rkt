@@ -8,6 +8,7 @@
          ffi/unsafe/custodian
          racket/async-channel
          racket/pretty
+         racket/runtime-path
          (rename-in racket/contract [-> ->/c]))
 
 (provide make-rtmidi-in
@@ -17,7 +18,8 @@
          rtmidi-close-port
          rtmidi-send-message)
 
-(define-ffi-definer define-rtmidi (ffi-lib "wrap-rtmidi"))
+(define-runtime-path wrap-rtmidi "wrap-rtmidi")
+(define-ffi-definer define-rtmidi (ffi-lib wrap-rtmidi))
 
 (define _rtmidi_in-pointer  (_cpointer 'rtmidi_in))
 (define _rtmidi_out-pointer (_cpointer 'rtmidi_out))
