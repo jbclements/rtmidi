@@ -13,7 +13,7 @@ macosx: LDFLAGS += -framework CoreMIDI -framework CoreAudio -framework CoreFound
 macosx: wrap-rtmidi.dylib
 
 wrap-rtmidi.so: wrap-rtmidi.o rtmidi-2.1.0/RtMidi.o
-	$(CXX) $(LDFLAGS) -fPIC -shared -o $@ $^
+	$(CXX) -fPIC -shared -o $@ $^ $(LDFLAGS)
 
 wrap-rtmidi.dylib: wrap-rtmidi.so
 	ln -fs wrap-rtmidi.so wrap-rtmidi.dylib
