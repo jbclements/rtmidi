@@ -16,7 +16,18 @@
          rtmidi-ports
          rtmidi-open-port
          rtmidi-close-port
-         rtmidi-send-message)
+         rtmidi-send-message
+         compatible-make-sized-byte-string)
+
+(define (copy-to-byte-string cptr len)
+   (define v (make-bytes len 0))
+   (memcpy v cptr len)
+   v)
+
+(define compatible-make-sized-byte-string
+   (with-handlers ([exn:fail? (λ _ copy-to-byte-string)])
+     (make-sized-byte-string #"0" 1)
+     make-sized-byte-string))
 
 (define-runtime-path wrap-rtmidi "wrap-rtmidi")
 (define-ffi-definer define-rtmidi (ffi-lib wrap-rtmidi))
@@ -40,7 +51,7 @@
     (lambda(type sz str)
       (proc type
             (bytes->string/utf-8
-             (make-sized-byte-string str sz))))))
+             (compatible-make-sized-byte-string str sz))))))
 
 (define event-callback-box (make-parameter #f))
 (define error-callback-box (make-parameter #f))
@@ -53,7 +64,7 @@
                        (lambda(del sz str)
                          (begin0
                            (proc del
-                                 (bytes-copy (make-sized-byte-string str sz))))
+                                 (bytes-copy (compatible-make-sized-byte-string str sz))))
                          (free str)))
                      #:async-apply
                      transfer-to-event-thread
@@ -92,7 +103,7 @@
         (o  : (_ptr o _pointer))
         -> _void
         -> (begin0
-             (bytes->string/utf-8 (make-sized-byte-string o sz))
+             (bytes->string/utf-8 (compatible-make-sized-byte-string o sz))
              (free o))))
 
 (define-rtmidi
@@ -106,7 +117,7 @@
         (o  : (_ptr o _pointer))
         -> _void
         -> (begin0
-             (bytes->string/utf-8 (make-sized-byte-string o sz))
+             (bytes->string/utf-8 (compatible-make-sized-byte-string o sz))
              (free o))))
 
 (define-rtmidi
